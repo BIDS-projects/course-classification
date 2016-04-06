@@ -1,0 +1,256 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "from datascience import *"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "    <thead>\n",
+       "        <tr>\n",
+       "            <th>Type of Course</th> <th>ID</th> <th>Department</th> <th>Course #</th> <th>Course Name</th> <th>Units</th> <th>Prerequisites</th> <th>Tools</th> <th>Description</th>\n",
+       "        </tr>\n",
+       "    </thead>\n",
+       "    <tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>1   </td> <td>African American Studies (AFRICAM)     </td> <td>101     </td> <td>Research Methods for African American Studies               </td> <td>5    </td> <td>STAT 2 or STAT 20</td> <td>nan  </td> <td>As an introduction to interdisciplinary research methods ...</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>2   </td> <td>American Studies (AMERSTD)             </td> <td>C134    </td> <td>Information Technology and Society                          </td> <td>4    </td> <td>None             </td> <td>nan  </td> <td>This course assesses the role of information technology  ...</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Core          </td> <td>3   </td> <td>Anthropology (ANTHRO)                  </td> <td>169A    </td> <td>Data Analysis and Computational Methods                     </td> <td>4    </td> <td>ANTHRO 2         </td> <td>nan  </td> <td>This course capitalizes on a successful approach of usin ...</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>4   </td> <td>Anthropology (ANTHRO)                  </td> <td>135     </td> <td>Paleoethnobotany: Archaeological Methods and Laboratory  ...</td> <td>4    </td> <td>ANTHRO 2         </td> <td>nan  </td> <td>An introduction to the basic approaches and techniques i ...</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>5   </td> <td>Anthropology (ANTHRO)                  </td> <td>169B    </td> <td>Research Theory and Methods in Socio-Cultural Anthropology  </td> <td>5    </td> <td>ANTHRO 3         </td> <td>nan  </td> <td>Introduction to research problems and research design te ...</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>6   </td> <td>Anthropology (ANTHRO)                  </td> <td>169C    </td> <td>Research Theory and Methods in Linguistic Anthropology      </td> <td>4    </td> <td>None             </td> <td>nan  </td> <td>This course provides an introduction to selected theorie ...</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>7   </td> <td>Architecture (ARCH)                    </td> <td>154     </td> <td>Design and Computer Analysis of Structure                   </td> <td>3    </td> <td>ARCH 150         </td> <td>nan  </td> <td>Design and analysis of whole structural building systems ...</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>8   </td> <td>Asian American Studies Program (ASAMST)</td> <td>165     </td> <td>Research Methodologies in Asian American Communities        </td> <td>4    </td> <td>ASAMST 20A or 20B</td> <td>nan  </td> <td>Approaches to research in the Asian American community w ...</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Core          </td> <td>9   </td> <td>Bioengineering (BIO ENG)               </td> <td>143     </td> <td>Computational Methods in Biology                            </td> <td>4    </td> <td>MATH 53, MATH 54 </td> <td>nan  </td> <td>An introduction to biophysical simulation methods and al ...</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>10  </td> <td>Bioengineering (BIO ENG)               </td> <td>131     </td> <td>Introduction to Computational Molecular and Cell Biology    </td> <td>4    </td> <td>MATH 54, BIO 1A  </td> <td>nan  </td> <td>Topics include computational approaches and techniques t ...</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "</table>\n",
+       "<p>... (142 rows omitted)</p"
+      ],
+      "text/plain": [
+       "Type of Course | ID   | Department                              | Course # | Course Name                                                  | Units | Prerequisites     | Tools | Description\n",
+       "Method         | 1    | African American Studies (AFRICAM)      | 101      | Research Methods for African American Studies                | 5     | STAT 2 or STAT 20 | nan   | As an introduction to interdisciplinary research methods ...\n",
+       "Method         | 2    | American Studies (AMERSTD)              | C134     | Information Technology and Society                           | 4     | None              | nan   | This course assesses the role of information technology  ...\n",
+       "Core           | 3    | Anthropology (ANTHRO)                   | 169A     | Data Analysis and Computational Methods                      | 4     | ANTHRO 2          | nan   | This course capitalizes on a successful approach of usin ...\n",
+       "Method         | 4    | Anthropology (ANTHRO)                   | 135      | Paleoethnobotany: Archaeological Methods and Laboratory  ... | 4     | ANTHRO 2          | nan   | An introduction to the basic approaches and techniques i ...\n",
+       "Method         | 5    | Anthropology (ANTHRO)                   | 169B     | Research Theory and Methods in Socio-Cultural Anthropology   | 5     | ANTHRO 3          | nan   | Introduction to research problems and research design te ...\n",
+       "Method         | 6    | Anthropology (ANTHRO)                   | 169C     | Research Theory and Methods in Linguistic Anthropology       | 4     | None              | nan   | This course provides an introduction to selected theorie ...\n",
+       "Method         | 7    | Architecture (ARCH)                     | 154      | Design and Computer Analysis of Structure                    | 3     | ARCH 150          | nan   | Design and analysis of whole structural building systems ...\n",
+       "Method         | 8    | Asian American Studies Program (ASAMST) | 165      | Research Methodologies in Asian American Communities         | 4     | ASAMST 20A or 20B | nan   | Approaches to research in the Asian American community w ...\n",
+       "Core           | 9    | Bioengineering (BIO ENG)                | 143      | Computational Methods in Biology                             | 4     | MATH 53, MATH 54  | nan   | An introduction to biophysical simulation methods and al ...\n",
+       "Method         | 10   | Bioengineering (BIO ENG)                | 131      | Introduction to Computational Molecular and Cell Biology     | 4     | MATH 54, BIO 1A   | nan   | Topics include computational approaches and techniques t ...\n",
+       "... (142 rows omitted)"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Loads the csv data file for further data cleaning\n",
+    "file_name = \"courses.csv\"\n",
+    "un_cleaned = Table.read_table(file_name)\n",
+    "courses = un_cleaned.take(np.arange(152)).drop([9,10])\n",
+    "courses"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 105,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "    <thead>\n",
+       "        <tr>\n",
+       "            <th>Type of Course</th> <th>ID</th> <th>Department</th> <th>Course #</th> <th>Course Name</th> <th>Units</th> <th>Prerequisites</th> <th>Tools</th> <th>Description</th> <th>Applied</th> <th>Meta</th> <th>Tool</th>\n",
+       "        </tr>\n",
+       "    </thead>\n",
+       "    <tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>1   </td> <td>African American Studies (AFRICAM)     </td> <td>101     </td> <td>Research Methods for African American Studies               </td> <td>5    </td> <td>STAT 2 or STAT 20</td> <td>nan  </td> <td>As an introduction to interdisciplinary research methods ...</td> <td>True   </td> <td>False</td> <td>False</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>2   </td> <td>American Studies (AMERSTD)             </td> <td>C134    </td> <td>Information Technology and Society                          </td> <td>4    </td> <td>None             </td> <td>nan  </td> <td>This course assesses the role of information technology  ...</td> <td>False  </td> <td>True </td> <td>False</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Core          </td> <td>3   </td> <td>Anthropology (ANTHRO)                  </td> <td>169A    </td> <td>Data Analysis and Computational Methods                     </td> <td>4    </td> <td>ANTHRO 2         </td> <td>nan  </td> <td>This course capitalizes on a successful approach of usin ...</td> <td>True   </td> <td>False</td> <td>False</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>4   </td> <td>Anthropology (ANTHRO)                  </td> <td>135     </td> <td>Paleoethnobotany: Archaeological Methods and Laboratory  ...</td> <td>4    </td> <td>ANTHRO 2         </td> <td>nan  </td> <td>An introduction to the basic approaches and techniques i ...</td> <td>True   </td> <td>False</td> <td>False</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>5   </td> <td>Anthropology (ANTHRO)                  </td> <td>169B    </td> <td>Research Theory and Methods in Socio-Cultural Anthropology  </td> <td>5    </td> <td>ANTHRO 3         </td> <td>nan  </td> <td>Introduction to research problems and research design te ...</td> <td>True   </td> <td>True </td> <td>False</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>6   </td> <td>Anthropology (ANTHRO)                  </td> <td>169C    </td> <td>Research Theory and Methods in Linguistic Anthropology      </td> <td>4    </td> <td>None             </td> <td>nan  </td> <td>This course provides an introduction to selected theorie ...</td> <td>True   </td> <td>False</td> <td>False</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>7   </td> <td>Architecture (ARCH)                    </td> <td>154     </td> <td>Design and Computer Analysis of Structure                   </td> <td>3    </td> <td>ARCH 150         </td> <td>nan  </td> <td>Design and analysis of whole structural building systems ...</td> <td>True   </td> <td>False</td> <td>False</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>8   </td> <td>Asian American Studies Program (ASAMST)</td> <td>165     </td> <td>Research Methodologies in Asian American Communities        </td> <td>4    </td> <td>ASAMST 20A or 20B</td> <td>nan  </td> <td>Approaches to research in the Asian American community w ...</td> <td>True   </td> <td>False</td> <td>False</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Core          </td> <td>9   </td> <td>Bioengineering (BIO ENG)               </td> <td>143     </td> <td>Computational Methods in Biology                            </td> <td>4    </td> <td>MATH 53, MATH 54 </td> <td>nan  </td> <td>An introduction to biophysical simulation methods and al ...</td> <td>True   </td> <td>False</td> <td>False</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "        <tr>\n",
+       "            <td>Method        </td> <td>10  </td> <td>Bioengineering (BIO ENG)               </td> <td>131     </td> <td>Introduction to Computational Molecular and Cell Biology    </td> <td>4    </td> <td>MATH 54, BIO 1A  </td> <td>nan  </td> <td>Topics include computational approaches and techniques t ...</td> <td>True   </td> <td>False</td> <td>False</td>\n",
+       "        </tr>\n",
+       "    </tbody>\n",
+       "</table>\n",
+       "<p>... (142 rows omitted)</p"
+      ],
+      "text/plain": [
+       "Type of Course | ID   | Department                              | Course # | Course Name                                                  | Units | Prerequisites     | Tools | Description                                                  | Applied | Meta  | Tool\n",
+       "Method         | 1    | African American Studies (AFRICAM)      | 101      | Research Methods for African American Studies                | 5     | STAT 2 or STAT 20 | nan   | As an introduction to interdisciplinary research methods ... | True    | False | False\n",
+       "Method         | 2    | American Studies (AMERSTD)              | C134     | Information Technology and Society                           | 4     | None              | nan   | This course assesses the role of information technology  ... | False   | True  | False\n",
+       "Core           | 3    | Anthropology (ANTHRO)                   | 169A     | Data Analysis and Computational Methods                      | 4     | ANTHRO 2          | nan   | This course capitalizes on a successful approach of usin ... | True    | False | False\n",
+       "Method         | 4    | Anthropology (ANTHRO)                   | 135      | Paleoethnobotany: Archaeological Methods and Laboratory  ... | 4     | ANTHRO 2          | nan   | An introduction to the basic approaches and techniques i ... | True    | False | False\n",
+       "Method         | 5    | Anthropology (ANTHRO)                   | 169B     | Research Theory and Methods in Socio-Cultural Anthropology   | 5     | ANTHRO 3          | nan   | Introduction to research problems and research design te ... | True    | True  | False\n",
+       "Method         | 6    | Anthropology (ANTHRO)                   | 169C     | Research Theory and Methods in Linguistic Anthropology       | 4     | None              | nan   | This course provides an introduction to selected theorie ... | True    | False | False\n",
+       "Method         | 7    | Architecture (ARCH)                     | 154      | Design and Computer Analysis of Structure                    | 3     | ARCH 150          | nan   | Design and analysis of whole structural building systems ... | True    | False | False\n",
+       "Method         | 8    | Asian American Studies Program (ASAMST) | 165      | Research Methodologies in Asian American Communities         | 4     | ASAMST 20A or 20B | nan   | Approaches to research in the Asian American community w ... | True    | False | False\n",
+       "Core           | 9    | Bioengineering (BIO ENG)                | 143      | Computational Methods in Biology                             | 4     | MATH 53, MATH 54  | nan   | An introduction to biophysical simulation methods and al ... | True    | False | False\n",
+       "Method         | 10   | Bioengineering (BIO ENG)                | 131      | Introduction to Computational Molecular and Cell Biology     | 4     | MATH 54, BIO 1A   | nan   | Topics include computational approaches and techniques t ... | True    | False | False\n",
+       "... (142 rows omitted)"
+      ]
+     },
+     "execution_count": 105,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "applied = [\"Research\", \"Analy\", \"Method\", \"Access\", \"Computational\", \"Language Processing\", \"Artificial Intelligence\",\n",
+    "           \"Population Science\", \"Econo\", \"Optimization\", \"Geospatial\", \"Count\", \"Quality Control\", \"Statistics\", \"Behavior and Data\", \n",
+    "          \"Empiricism\", \"Literature and Data\", \"Experiment\", \"Time Series\", \"Sampling\", \"Statistical Models\", \"Mathematical Statistics\", \"Matrices and Graphs\"]\n",
+    "meta = [\"Privacy\", \"Ethic\", \"Law\", \"Philosophy\", \"Society\", \"Cultur\", \"Cities\", \"Mind\", \"Government\", \"Demography\", \n",
+    "        \"Policy\", \"Simulation\", \"Poverty\", \"Global\", \"Agriculture\", \"Historical\", \"Environmental\", \"History\", \"Media\", \n",
+    "        \"Decision Making\", \"Social\"]\n",
+    "tool = [\"Program\", \"Query\", \"Database\", \"Programming\", \"Systems\", \"Digital\", \"Software\", \"Algorithm\", \"Processing\", \"Machine Learning\", \"Data Science\", \n",
+    "        \"Data Structures\", \"Unix\", \"Machine Structures\", \"Computing\", \"Probability\", \"Introduction to Statistics\"]\n",
+    "is_applied = []\n",
+    "is_meta = []\n",
+    "is_tool = []\n",
+    "def is_category(course, terms):\n",
+    "    for term in terms:\n",
+    "        if term in course:\n",
+    "            return True\n",
+    "    return False\n",
+    "\n",
+    "def array_maker(terms, added_array):\n",
+    "    for i in courses.column(\"Course Name\"):\n",
+    "        added_array.append(is_category(i, terms))\n",
+    "    return added_array\n",
+    "\n",
+    "courses = courses.with_columns([\n",
+    "        \"Applied\", array_maker(applied, is_applied),\n",
+    "        \"Meta\", array_maker(meta, is_meta), \n",
+    "        \"Tool\", array_maker(tool, is_tool)                    \n",
+    "    ])\n",
+    "courses"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 106,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "courses.to_df().to_csv('classified_courses.csv', index = False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.4.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 0
+}
